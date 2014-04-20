@@ -99,8 +99,8 @@ SVGTree.Canvas = function(canvas_element, width, height){
 		this.svgNode = svgNode;
 		svgNode.setAttribute("xmlns", "http://www.w3.org/2000/svg");
 		svgNode.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");	
-		svgNode.setAttribute("width", 200);
-		svgNode.setAttribute("height", 100	);
+		svgNode.setAttribute("width", this.width);
+		svgNode.setAttribute("height", this.height);
 		console.log(svgNode);
 		this.container.appendChild(svgNode);
 		this.container.appendChild(objectNode);
@@ -128,7 +128,7 @@ SVGTree.Tree = function(width, height, level){
 	this.max_children_per_branch = 2;
 	this.min_children_per_branch =1;
 
-	this.root = new SVGTree.TreeBranch(new SVGTree.Point(0,0), new SVGTree.Point(0, 100));
+	this.root = new SVGTree.TreeBranch(new SVGTree.Point(width/2,0), new SVGTree.Point(width/2, 100));
 
 	this.generate = function(){
 		var branch_to_extend = this.root;
