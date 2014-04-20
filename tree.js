@@ -99,7 +99,7 @@ SVGTree.Canvas = function(canvas_element, width, height){
 
 	init();
 
-	new SVGTree.Line({x:"1", y:1}, {x:1, y:2.3})
+	//new SVGTree.Line({x:"1", y:1}, {x:1, y:2.3})
 }
 
 SVGTree.Tree = function(width, height, level){
@@ -119,8 +119,8 @@ SVGTree.Tree = function(width, height, level){
 		}
 	}
 
-	this.draw = function(){
-		this.root.draw();
+	this.draw = function(node){
+		this.root.draw(node);
 	}
 }
 
@@ -138,6 +138,12 @@ SVGTree.TreeBranch = function(){
 		this.line.pos1 = arguments[1];
 	}
 
+	this.draw = function(node){
+		this.line.draw(node);
+		for(var i in this.children){
+			this.children[i].draw();
+		}
+	}
 
 	this.newChild = function(){
 		var length = 1;
