@@ -117,7 +117,7 @@ SVGTree.Tree = function(width, height, level){
 	this.max_children_per_branch = 2;
 	this.min_children_per_branch =1;
 
-	this.root = new SVGTree.TreeBranch(new SVGTree.Point(0,0), nev SVGTree.Point(0, 1));
+	this.root = new SVGTree.TreeBranch(new SVGTree.Point(0,0), new SVGTree.Point(0, 1));
 
 	this.generate = function(){
 		var branch_to_extend = this.root;
