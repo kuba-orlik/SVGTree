@@ -2,7 +2,9 @@ var getElem = function(selector){
 	return document.querySelectorAll(selector);
 }
 
-var SVGTree = {};
+var SVGTree = new function(){
+
+};
 
 function ExceptionConstructor(type){
 	return function(message){
@@ -59,26 +61,37 @@ SVGTree.Canvas = function(canvas_element, width, height){
 				if(result.length==0){
 					throw new SVGTreeException("selector \"" +canvas_element + "\" does not match any node in document");
 				}
-				self.element=result[0]
+				self.container=result[0]
 			},
 			//if it's an object, assume it's a DOM node object
 			"object": function(){
-				self.element = canvas_element;
+				self.container = canvas_element;
 			}
 		}
 		//perform one of the actions described above
 		actions[type]();
 		if(width!=undefined){
-			self.element.width = width;
+			self.width = width;
 		}else{
-			self.element.width = "200px"
+			self.width = "200"
 		}
 		if(height!=undefined){
-			self.element.height = height;			
+			self.height = height;			
 		}else{
-			self.element.height = "200px";
+			self.height = "200";
 		}
+		self.createCanvas();
 	}	
+
+	this.createCanvas = function(){
+		var objectNode = document.createElement("object");
+		objectNode.type="image/svg+xml";
+		objectNode.width = self.width;
+		objectNode.height = self.height;
+		var svgNode = document.createElement("svg");
+		objectNode.appendChild(svgNode);
+		this.container.appendChild(objectNode);
+	}
 
 	init();
 
