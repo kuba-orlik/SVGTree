@@ -128,13 +128,23 @@ SVGTree.Tree = function(width, height, level){
 	this.max_children_per_branch = 2;
 	this.min_children_per_branch =1;
 
-	this.root = new SVGTree.TreeBranch(new SVGTree.Point(width/2,height), new SVGTree.Point(width/2, height-100));
+	this.base_branch_length = height/level;
+
+
+	this.root = new SVGTree.TreeBranch(new SVGTree.Point(width/2,height), new SVGTree.Point(width/2, height-this.base_branch_length), this, true);
 
 	this.generate = function(){
 		var branch_to_extend = this.root;
-		var children_to_add = this.min_children_per_branch+Math.ceil(Math.random()*(this.max_children_per_branch-this.min_children_per_branch));
-		for(var i=1; i<=children_to_add; i++){
-			branch_to_extend.newChild();
+		this.extendBranch(this.root, this.level);
+	}
+
+	this.extendBranch = function(branch, level){
+		if(level!=0){
+			var amount = this.min_children_per_branch+Math.ceil(Math.random()*(this.max_children_per_branch-this.min_children_per_branch));
+			var children = branch.generateChildren(amount);
+			for(var i in children){
+				this.extendBranch(children[i], level-1);
+			}			
 		}
 	}
 
@@ -149,12 +159,22 @@ SVGTree.TreeBranch = function(){
 	this.line = new SVGTree.Line();
 	
 	if(arguments.length==1){
-		this.parent = arguments[1];
+		this.parent = arguments[0];
+		this.tree_origin = arguments[0].tree_origin;
 	}
 
 	if(arguments.length==2){
 		this.line.pos0 = arguments[0];
 		this.line.pos1 = arguments[1];
+	}
+
+	if(arguments.length==4){
+		this.line.pos0 = arguments[0];
+		this.line.pos1 = arguments[1];
+		this.parent = arguments[2];
+		if(arguments[3]){
+			this.tree_origin = arguments[2];
+		}
 	}
 
 	this.draw = function(node){
@@ -167,13 +187,20 @@ SVGTree.TreeBranch = function(){
 
 	this.newChild = function(){
 		var length = 100;
-		var angle = 180*Math.random();
+		var angle = 30+120*Math.random();
 		var vector = SVGTree.Math.getVectorCoordinates(length, angle);
 		var child_branch = new SVGTree.TreeBranch(this);
 		child_branch.line.pos0 = this.line.pos1;
-		child_branch.line.pos1 = this.line.pos1.copy().extend(length, angle);
+		child_branch.line.pos1 = this.line.pos1.copy().extend(this.tree_origin.base_branch_length, angle);
 		this.children.push(child_branch);
 		//child_branch.line.
+	}
+
+	this.generateChildren = function(amount){
+		for(var i=1; i<=amount; i++){
+			this.newChild();
+		}
+		return this.children;
 	}
 }	
 
