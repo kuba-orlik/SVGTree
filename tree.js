@@ -119,13 +119,13 @@ SVGTree.TreeBranch = function(pos0, pos1, parentBranch){
 
 	this.line = new SVGTree.Line(pos0, pos1);
 
-	this.newChild(length, angle){
+	this.newChild = function(length, angle){
 
 	}
-}
+}	
 
 SVGTree.Math = {
-	degToRad = function(deg){
+	degToRad: function(deg){
 		return 360/deg * 2 *Math.Pi;
 	}
 }
