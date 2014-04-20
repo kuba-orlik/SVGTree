@@ -97,3 +97,21 @@ SVGTree.Canvas = function(canvas_element, width, height){
 
 	new SVGTree.Line({x:"1", y:1}, {x:1, y:2.3})
 }
+
+SVGTree.Tree = function(width, height, level){
+	this.width = parseFloat(width)
+	this.height = parseFloat(height);
+	this.level = parseInt(level);
+
+	this.generate = function(){
+
+	}
+}
+
+SVGTree.TreeBranch = function(pos0, pos1){
+	this.x1 = pos0.x;
+	this.y1 = pos0.y;
+	this.x2 = pos1.x;
+	this.y2 = pos1.y;
+	this.line = new SVGTree.Line(pos0, pos1);
+}
