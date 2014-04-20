@@ -20,6 +20,8 @@ LineException = ExceptionConstructor("LineException");
 
 SVGTree.Line = function(pos0, pos1){
 
+	this.pos0 = pos0;
+	this.pos1 = pos1;
 
 	this.checkpos = function(){
 		if(!(this.pos0 instanceof SVGTree.Point)){
@@ -116,6 +118,10 @@ SVGTree.TreeBranch = function(){
 	
 	if(arguments.length==1){
 		this.parent = arguments[1];
+	}
+
+	if(arguments.length==2){
+
 	}
 
 	this.line = new SVGTree.Line(pos0, pos1);
