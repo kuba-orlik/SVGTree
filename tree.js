@@ -112,14 +112,14 @@ SVGTree.Tree = function(width, height, level){
 	}
 }
 
-SVGTree.TreeBranch = function(pos0, pos1, parentBranch){
-	this.x1 = pos0.x;
-	this.y1 = pos0.y;
-	this.x2 = pos1.x;
-	this.y2 = pos1.y;
-
-	this.parent = parentBranch;
+SVGTree.TreeBranch = function(){
 	this.children = [];
+	this.parent = null;
+	
+	if(arguments.length==1){
+		this.parent = arguments[1];
+	}
+
 
 	this.line = new SVGTree.Line(pos0, pos1);
 
@@ -127,7 +127,7 @@ SVGTree.TreeBranch = function(pos0, pos1, parentBranch){
 		var length = 1;
 		var angle = 360*Math.random();
 		var vector = SVGTree.Math.getVectorCoordinates(length, angle);
-		var child_line = new SNGTree.Line();
+		var child_branch = new SNGTree.TreeBranch();
 	}
 }	
 
