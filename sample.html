@@ -13,7 +13,8 @@
 	<script src="tree.js"></script>
 	<script>
 		var tree_canvas = new SVGTree.Canvas("#tree-canvas", 300, 300);
-		tree_canvas.generateTree(8);
+		tree_canvas.symmetrical = true;
+		tree_canvas.generateTree(4);
 		tree_canvas.draw();
 		//console.log(tree);
 	</script>
