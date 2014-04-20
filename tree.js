@@ -143,8 +143,9 @@ SVGTree.Point = function(x, y){
 		}
 	}
 
-	this.extend = function(x, y){
-
+	this.extend = function(length, angle){
+		var vector = SVGTree.Math.getVectorCoordinates(length, angle);
+		this.translate(vector);
 	}
 }
 
