@@ -24,7 +24,7 @@ SVGTree.Line = function(pos0, pos1){
 	this.checkpos = function(){
 		for(var j = 0; j<2; j++){
 			for(var i in {"x":0, "y":0}){
-				var value = parseFloat(arguments[j][i]);
+				var value = parseFloat(this["pos"+j][i]);
 				if(isNaN(value)){
 					throw new LineException("pos" + j + "." + i + " must be a number");
 				}
@@ -48,6 +48,7 @@ SVGTree.Line = function(pos0, pos1){
 		node.y2 = pos1.y;
 		canvas_element.appendChild(node);
 	}
+
 }
 
 SVGTreeException = ExceptionConstructor("SVGTreeException");
@@ -120,16 +121,25 @@ SVGTree.TreeBranch = function(){
 		this.parent = arguments[1];
 	}
 
-
 	this.line = new SVGTree.Line(pos0, pos1);
 
 	this.newChild = function(){
 		var length = 1;
 		var angle = 360*Math.random();
 		var vector = SVGTree.Math.getVectorCoordinates(length, angle);
-		var child_branch = new SNGTree.TreeBranch();
+		var child_branch = new SNGTree.TreeBranch(this);
+		child_branch.line.
 	}
 }	
+
+SVGTree.Point = function(x, y){
+	this.x = x;
+	this.y = y;
+
+	this.translate = function(x, y){
+		
+	}
+}
 
 SVGTree.Math = {
 	degToRad: function(deg){
