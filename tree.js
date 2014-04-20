@@ -22,15 +22,12 @@ SVGTree.Line = function(pos0, pos1){
 
 
 	this.checkpos = function(){
-		for(var j = 0; j<2; j++){
-			for(var i in {"x":0, "y":0}){
-				var value = parseFloat(this["pos"+j][i]);
-				if(isNaN(value)){
-					throw new LineException("pos" + j + "." + i + " must be a number");
-				}
-				arguments[j][i]=value;
-			}			
-		}		
+		if(!(this.pos0 instanceof SVGTree.Point)){
+			throw new LineException("pos0 must be an instance of SVGTree.Point");
+		}	
+		if(!(this.pos1 instanceof SVGTree.Point)){
+			throw new LineException("pos1 must be an instance of SVGTree.Point");
+		}	
 	}
 
 	this.DOM_element = null;
@@ -136,7 +133,17 @@ SVGTree.Point = function(x, y){
 	this.x = x;
 	this.y = y;
 
-	this.translate = function(x, y){
+	this.translate = function(){
+		if(arguments.length==1){
+			this.x+=arguments[0].x;
+			this.y+=arguments[0].y;
+		}else{
+			this.x+=arguments[0];
+			this.y+=arguments[1];
+		}
+	}
+
+	this.extend = function(x, y){
 
 	}
 }
