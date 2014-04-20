@@ -100,6 +100,14 @@ SVGTree.Canvas = function(canvas_element, width, height){
 	init();
 
 	//new SVGTree.Line({x:"1", y:1}, {x:1, y:2.3})
+
+	this.generateTree = function(level){
+		this.Tree = new SVGTree.Tree(this.width, this.height, level);
+	}
+
+	this.draw = function(){
+		this.Tree.draw();
+	}
 }
 
 SVGTree.Tree = function(width, height, level){

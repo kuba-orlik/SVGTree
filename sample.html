@@ -12,7 +12,9 @@
 	</body>
 	<script src="tree.js"></script>
 	<script>
-		var tree = new SVGTree.Canvas("#tree-canvas", 300, 300);
+		var tree_canvas = new SVGTree.Canvas("#tree-canvas", 300, 300);
+		tree_canvas.generateTree(3);
+		tree_canvas.draw();
 		console.log(tree);
 	</script>
 </html>
