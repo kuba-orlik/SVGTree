@@ -2,6 +2,8 @@ var getElem = function(selector){
 	return document.querySelectorAll(selector);
 }
 
+var SVGTree = {};
+
 function ExceptionConstructor(type){
 	return function(message){
 		this.name=type;
@@ -14,7 +16,7 @@ function ExceptionConstructor(type){
 
 LineException = ExceptionConstructor("LineException");
 
-function Line(pos0, pos1){
+SVGTree.Line = function(pos0, pos1){
 	if(pos0==undefined || pos1==undefined){
 		throw new LineException("Constructor expects 2 arguments");
 	}
@@ -44,7 +46,7 @@ function Line(pos0, pos1){
 
 SVGTreeException = ExceptionConstructor("SVGTreeException");
 
-function SVGTree(canvas_element, width, height){
+SVGTree.Canvas = function(canvas_element, width, height){
 	var self = this;
 	
 	function init(){
@@ -80,5 +82,5 @@ function SVGTree(canvas_element, width, height){
 
 	init();
 
-	new Line({x:"1", y:1}, {x:1, y:2.3})
+	new SVGTree.Line({x:"1", y:1}, {x:1, y:2.3})
 }
