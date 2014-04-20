@@ -128,7 +128,7 @@ SVGTree.TreeBranch = function(){
 		var angle = 360*Math.random();
 		var vector = SVGTree.Math.getVectorCoordinates(length, angle);
 		var child_branch = new SNGTree.TreeBranch(this);
-		child_branch.line.
+		//child_branch.line.
 	}
 }	
 
@@ -137,7 +137,7 @@ SVGTree.Point = function(x, y){
 	this.y = y;
 
 	this.translate = function(x, y){
-		
+
 	}
 }
 
