@@ -128,7 +128,7 @@ SVGTree.Tree = function(width, height, level){
 	this.max_children_per_branch = 2;
 	this.min_children_per_branch =1;
 
-	this.root = new SVGTree.TreeBranch(new SVGTree.Point(width/2,0), new SVGTree.Point(width/2, 100));
+	this.root = new SVGTree.TreeBranch(new SVGTree.Point(width/2,height), new SVGTree.Point(width/2, height-100));
 
 	this.generate = function(){
 		var branch_to_extend = this.root;
@@ -167,7 +167,7 @@ SVGTree.TreeBranch = function(){
 
 	this.newChild = function(){
 		var length = 100;
-		var angle = 360*Math.random();
+		var angle = 180*Math.random();
 		var vector = SVGTree.Math.getVectorCoordinates(length, angle);
 		var child_branch = new SVGTree.TreeBranch(this);
 		child_branch.line.pos0 = this.line.pos1;
@@ -212,8 +212,8 @@ SVGTree.Math = {
 	getVectorCoordinates: function(length, angle){
 		var angle = SVGTree.Math.degToRad(angle);
 		return {
-			x: length * Math.sin(angle),
-			y: length * Math.cos(angle)
+			x: length * Math.cos(angle),
+			y: -length * Math.sin(angle)
 		}
 	}
 }
