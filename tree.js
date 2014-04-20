@@ -18,10 +18,11 @@ function ExceptionConstructor(type){
 
 LineException = ExceptionConstructor("LineException");
 
-SVGTree.Line = function(pos0, pos1){
+SVGTree.Line = function(pos0, pos1, stroke_width){
 
 	this.pos0 = pos0;
 	this.pos1	 = pos1;
+	this.stroke_width = stroke_width==undefined? 1 : stroke_width;
 
 	this.checkpos = function(){
 		if(!(this.pos0 instanceof SVGTree.Point)){
@@ -45,7 +46,7 @@ SVGTree.Line = function(pos0, pos1){
 		node.setAttribute("y1", this.pos0.y);
 		node.setAttribute("x2", this.pos1.x);
 		node.setAttribute("y2", this.pos1.y);
-		node.setAttribute("stroke-width", 2);
+		node.setAttribute("stroke-width", this.stroke_width);
 		node.setAttribute("stroke", "black");
 		canvas_element.appendChild(node);
 	}
@@ -58,6 +59,8 @@ SVGTree.Canvas = function(canvas_element, width, height){
 	var self = this;
 
 	this.symmetrical = true;
+	this.decreasing_width = true;
+	this.base_stroke_width = 1;
 	
 	function init(){
 		//check type of the first constructor argument 
@@ -111,7 +114,7 @@ SVGTree.Canvas = function(canvas_element, width, height){
 	//new SVGTree.Line({x:"1", y:1}, {x:1, y:2.3})
 
 	this.generateTree = function(level){
-		this.Tree = new SVGTree.Tree(this.width, this.height, level, this.symmetrical);
+		this.Tree = new SVGTree.Tree(this.width, this.height, level, this);
 		this.Tree.generate();
 	}
 
@@ -120,18 +123,23 @@ SVGTree.Canvas = function(canvas_element, width, height){
 	}
 }
 
-SVGTree.Tree = function(width, height, level, symmetrical){
+SVGTree.Tree = function(width, height, level, canvas){
 	this.width = parseFloat(width)
 	this.height = parseFloat(height);
 	this.level = parseInt(level);
 
+	this.canvas = canvas;
+
+	this.symmetrical = this.canvas.symmetrical;
+	this.decreasing_width = this.canvas.decreasing_width;
+	this.base_stroke_width = this.canvas.base_stroke_width;
 
 	this.max_children_per_branch = 4;
 	this.min_children_per_branch =2;
 
 	this.base_branch_length = height/level;
 
-	this.symmetrical = symmetrical==undefined? true : symmetrical;
+	//this.symmetrical = symmetrical==undefined? true : symmetrical;
 
 	root = new SVGTree.TreeBranch(new SVGTree.Point(width/2,height), new SVGTree.Point(width/2, height-this.base_branch_length), this, true);
 
@@ -159,6 +167,9 @@ SVGTree.TreeBranch = function(){
 	this.children = [];
 	this.parent = null;
 	this.line = new SVGTree.Line();
+	this.tree_origin = null;
+
+	this.level;
 	
 	if(arguments.length==1){
 		this.parent = arguments[0];
@@ -176,10 +187,18 @@ SVGTree.TreeBranch = function(){
 		this.parent = arguments[2];
 		if(arguments[3]){
 			this.tree_origin = arguments[2];
+			this.level = 0;
 		}
 	}
 
 	this.draw = function(node){
+		var tree = this.tree_origin;
+		if(tree.decreasing_width){
+			this.line.stroke_width = (tree.base_stroke_width/tree.level)*(tree.level-this.level);
+		}else{
+			this.line.stroke_width = tree.base_stroke_width;
+		}
+		this.line.stroke_width = 
 		this.line.draw(node);
 		for(var i in this.children){
 			this.children[i].draw(node);
@@ -192,6 +211,7 @@ SVGTree.TreeBranch = function(){
 		var child_branch = new SVGTree.TreeBranch(this);
 		child_branch.line.pos0 = this.line.pos1;
 		child_branch.line.pos1 = this.line.pos1.copy().extend(length, angle);
+		child_branch.level = this.level+1;
 		this.children.push(child_branch);
 		//child_branch.line.
 	}
