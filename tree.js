@@ -21,7 +21,7 @@ LineException = ExceptionConstructor("LineException");
 SVGTree.Line = function(pos0, pos1){
 
 	this.pos0 = pos0;
-	this.pos1 = pos1;
+	this.pos1	 = pos1;
 
 	this.checkpos = function(){
 		if(!(this.pos0 instanceof SVGTree.Point)){
@@ -106,31 +106,47 @@ SVGTree.Tree = function(width, height, level){
 	this.width = parseFloat(width)
 	this.height = parseFloat(height);
 	this.level = parseInt(level);
+	this.max_children_per_branch = 2;
+	this.min_children_per_branch =1;
+
+	this.root = new SVGTree.TreeBranch(new SVGTree.Point(0,0), nev SVGTree.Point(0, 1));
 
 	this.generate = function(){
+		var branch_to_extend = this.root;
+		var children_to_add = this.min_children_per_branch+Math.ceil(Math.random()*(this.max_children_per_branch-this.min_children_per_branch));
+		for(var i=1; i<=children_to_add; i++){
+			branch_to_extend.newChild();
+		}
+	}
 
+	this.draw = function(){
+		this.root.draw();
 	}
 }
 
 SVGTree.TreeBranch = function(){
 	this.children = [];
 	this.parent = null;
+	this.line = new SVGTree.Line();
 	
 	if(arguments.length==1){
 		this.parent = arguments[1];
 	}
 
 	if(arguments.length==2){
-
+		this.line.pos0 = arguments[0];
+		this.line.pos1 = arguments[1];
 	}
 
-	this.line = new SVGTree.Line(pos0, pos1);
 
 	this.newChild = function(){
 		var length = 1;
 		var angle = 360*Math.random();
 		var vector = SVGTree.Math.getVectorCoordinates(length, angle);
 		var child_branch = new SNGTree.TreeBranch(this);
+		child_branch.line.pos0 = this.pos1;
+		child_branch.line.pos1 = this.pos1.extend(length, angle);
+		this.children.push(child_branch);
 		//child_branch.line.
 	}
 }	
