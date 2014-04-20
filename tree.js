@@ -19,23 +19,27 @@ function ExceptionConstructor(type){
 LineException = ExceptionConstructor("LineException");
 
 SVGTree.Line = function(pos0, pos1){
-	if(pos0==undefined || pos1==undefined){
-		throw new LineException("Constructor expects 2 arguments");
-	}
 
-	for(var j = 0; j<2; j++){
-		for(var i in {"x":0, "y":0}){
-			var value = parseFloat(arguments[j][i]);
-			if(isNaN(value)){
-				throw new LineException("pos" + j + "." + i + " must be a number");
-			}
-			arguments[j][i]=value;
-		}			
+
+	this.checkpos = function(){
+		for(var j = 0; j<2; j++){
+			for(var i in {"x":0, "y":0}){
+				var value = parseFloat(arguments[j][i]);
+				if(isNaN(value)){
+					throw new LineException("pos" + j + "." + i + " must be a number");
+				}
+				arguments[j][i]=value;
+			}			
+		}		
 	}
 
 	this.DOM_element = null;
 
 	this.draw = function(canvas_element){
+		if(pos0==undefined || pos1==undefined){
+			throw new LineException("In order to be drawn, Line needs to have pos0 and pos1 specified");
+		}
+		this.checkpos();
 		var node = document.createElement("line");
 		this.DOM_element = node;
 		node.x1 = pos0.x;
@@ -119,13 +123,24 @@ SVGTree.TreeBranch = function(pos0, pos1, parentBranch){
 
 	this.line = new SVGTree.Line(pos0, pos1);
 
-	this.newChild = function(length, angle){
-
+	this.newChild = function(){
+		var length = 1;
+		var angle = 360*Math.random();
+		var vector = SVGTree.Math.getVectorCoordinates(length, angle);
+		var child_line = new SNGTree.Line();
 	}
 }	
 
 SVGTree.Math = {
 	degToRad: function(deg){
-		return 360/deg * 2 *Math.Pi;
+		console.log(360/deg);
+		return (deg/360)* 2 *Math.PI;
+	},
+	getVectorCoordinates = function(length, angle){
+		var angle = SVGTree.Math.degToRad(angle);
+		return {
+			x: length * Math.sin(angle),
+			y: length * Math.cos(angle)
+		}
 	}
 }
