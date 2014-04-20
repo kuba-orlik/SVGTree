@@ -35,16 +35,19 @@ SVGTree.Line = function(pos0, pos1){
 	this.DOM_element = null;
 
 	this.draw = function(canvas_element){
-		if(pos0==undefined || pos1==undefined){
+		if(this.pos0==undefined || this.pos1==undefined){
 			throw new LineException("In order to be drawn, Line needs to have pos0 and pos1 specified");
 		}
 		this.checkpos();
-		var node = document.createElement("line");
+		var node =  document.createElementNS('http://www.w3.org/2000/svg','line');
+		console.log(node);
 		this.DOM_element = node;
-		node.x1 = pos0.x;
-		node.y1 = pos0.y;
-		node.x2 = pos1.x;
-		node.y2 = pos1.y;
+		node.setAttribute("x1", this.pos0.x);
+		node.setAttribute("y1", this.pos0.y);
+		node.setAttribute("x2", this.pos1.x);
+		node.setAttribute("y2", this.pos1.y);
+		node.setAttribute("stroke-width", 2);
+		node.setAttribute("stroke", "black");
 		canvas_element.appendChild(node);
 	}
 
@@ -89,12 +92,19 @@ SVGTree.Canvas = function(canvas_element, width, height){
 
 	this.createCanvas = function(){
 		var objectNode = document.createElement("object");
-		objectNode.type="image/svg+xml";
+		objectNode.setAttribute("type", "image/svg+xml");
 		objectNode.width = self.width;
 		objectNode.height = self.height;
-		var svgNode = document.createElement("svg");
-		objectNode.appendChild(svgNode);
+		var svgNode = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+		this.svgNode = svgNode;
+		svgNode.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+		svgNode.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");	
+		svgNode.setAttribute("width", 200);
+		svgNode.setAttribute("height", 100	);
+		console.log(svgNode);
+		this.container.appendChild(svgNode);
 		this.container.appendChild(objectNode);
+		console.log(this.container);
 	}
 
 	init();
@@ -103,10 +113,11 @@ SVGTree.Canvas = function(canvas_element, width, height){
 
 	this.generateTree = function(level){
 		this.Tree = new SVGTree.Tree(this.width, this.height, level);
+		this.Tree.generate();
 	}
 
 	this.draw = function(){
-		this.Tree.draw();
+		this.Tree.draw(this.svgNode);
 	}
 }
 
@@ -117,7 +128,7 @@ SVGTree.Tree = function(width, height, level){
 	this.max_children_per_branch = 2;
 	this.min_children_per_branch =1;
 
-	this.root = new SVGTree.TreeBranch(new SVGTree.Point(0,0), new SVGTree.Point(0, 1));
+	this.root = new SVGTree.TreeBranch(new SVGTree.Point(0,0), new SVGTree.Point(0, 100));
 
 	this.generate = function(){
 		var branch_to_extend = this.root;
@@ -147,19 +158,20 @@ SVGTree.TreeBranch = function(){
 	}
 
 	this.draw = function(node){
+		console.log(this.line);
 		this.line.draw(node);
 		for(var i in this.children){
-			this.children[i].draw();
+			this.children[i].draw(node);
 		}
 	}
 
 	this.newChild = function(){
-		var length = 1;
+		var length = 100;
 		var angle = 360*Math.random();
 		var vector = SVGTree.Math.getVectorCoordinates(length, angle);
-		var child_branch = new SNGTree.TreeBranch(this);
-		child_branch.line.pos0 = this.pos1;
-		child_branch.line.pos1 = this.pos1.extend(length, angle);
+		var child_branch = new SVGTree.TreeBranch(this);
+		child_branch.line.pos0 = this.line.pos1;
+		child_branch.line.pos1 = this.line.pos1.copy().extend(length, angle);
 		this.children.push(child_branch);
 		//child_branch.line.
 	}
@@ -177,17 +189,24 @@ SVGTree.Point = function(x, y){
 			this.x+=arguments[0];
 			this.y+=arguments[1];
 		}
+		console.log(this.x);
+	}
+
+	this.copy = function(){
+		return new SVGTree.Point(this.x, this.y);
 	}
 
 	this.extend = function(length, angle){
 		var vector = SVGTree.Math.getVectorCoordinates(length, angle);
+		console.log(vector);
 		this.translate(vector);
+		console.log(this.x);
+		return this;
 	}
 }
 
 SVGTree.Math = {
 	degToRad: function(deg){
-		console.log(360/deg);
 		return (deg/360)* 2 *Math.PI;
 	},
 	getVectorCoordinates: function(length, angle){
