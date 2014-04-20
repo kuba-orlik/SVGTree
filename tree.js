@@ -146,7 +146,7 @@ SVGTree.Math = {
 		console.log(360/deg);
 		return (deg/360)* 2 *Math.PI;
 	},
-	getVectorCoordinates = function(length, angle){
+	getVectorCoordinates: function(length, angle){
 		var angle = SVGTree.Math.degToRad(angle);
 		return {
 			x: length * Math.sin(angle),
