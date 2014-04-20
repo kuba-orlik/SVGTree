@@ -108,10 +108,24 @@ SVGTree.Tree = function(width, height, level){
 	}
 }
 
-SVGTree.TreeBranch = function(pos0, pos1){
+SVGTree.TreeBranch = function(pos0, pos1, parentBranch){
 	this.x1 = pos0.x;
 	this.y1 = pos0.y;
 	this.x2 = pos1.x;
 	this.y2 = pos1.y;
+
+	this.parent = parentBranch;
+	this.children = [];
+
 	this.line = new SVGTree.Line(pos0, pos1);
+
+	this.newChild(length, angle){
+
+	}
+}
+
+SVGTree.Math = {
+	degToRad = function(deg){
+		return 360/deg * 2 *Math.Pi;
+	}
 }
