@@ -25,6 +25,12 @@
 		<div>
 			base stroke width: <input id="thickness" class="attribute" type="number" value="2" step="0.5">
 		</div>
+		<div>
+			min branches on split: <input id="min-child" class="redraw" value="1" type="number" step="1" min="1" max="6">
+		</div>
+		<div>
+			max branches on split: <input id="max-child" class="redraw" value="3" type="number" step="1" min="1" max="6">
+		</div>
 		<button onclick="regenerateTree()">regenerate</button><br>
 		<button onclick="randomize()">
 			<img src="img/dice.png" style="height:20px"/>
@@ -78,6 +84,8 @@
 		tree_canvas.decreasing_length= $("shorter").checked;
 		tree_canvas.decreasing_length_ratio=$("length-ratio").value;
 		tree_canvas.generateTree($("level").value);
+		tree_canvas.max_children_per_branch = 3;
+		tree_canvas.min_children_per_branch =1;
 		attributeChange();
 	}
 
