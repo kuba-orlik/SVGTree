@@ -166,7 +166,10 @@ SVGTree.Tree = function(width, height, level, canvas){
 
 	this.extendBranch = function(branch, level){
 		if(level!=0){
-			var amount = this.min_children_per_branch+Math.floor(Math.random()*(this.max_children_per_branch-this.min_children_per_branch+1));
+			var max = parseInt(this.max_children_per_branch);
+			var min = parseInt(this.min_children_per_branch);
+			var amount = 0+min+Math.floor(Math.random()*(max-min+1));
+			console.log(amount);
 			var children = branch.generateChildren(amount);
 			for(var i in children){
 				this.extendBranch(children[i], level-1);
