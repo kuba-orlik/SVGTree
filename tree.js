@@ -63,6 +63,9 @@ SVGTree.Canvas = function(canvas_element, width, height){
 	this.decreasing_length = true;
 	this.decreasing_length_ratio = 0.8;
 	this.base_stroke_width = 1;
+
+	this.max_children_per_branch = 3;
+	this.min_children_per_branch = 1;
 	
 	function init(){
 		//check type of the first constructor argument 
@@ -143,12 +146,12 @@ SVGTree.Tree = function(width, height, level, canvas){
 		self.decreasing_length = self.canvas.decreasing_length;
 		self.decreasing_length_ratio = self.canvas.decreasing_length_ratio;
 		self.base_stroke_width = self.canvas.base_stroke_width;		
+		canvas.max_children_per_branch = self.canvas.max_children_per_branch;
+		canvas.min_children_per_branch =self.canvas.min_children_per_branch;
 	}
 
 	refreshParams();
 
-	this.max_children_per_branch = 3;
-	this.min_children_per_branch =1;
 
 	this.base_branch_length = this.height/level;
 
