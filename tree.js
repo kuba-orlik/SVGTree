@@ -146,8 +146,8 @@ SVGTree.Tree = function(width, height, level, canvas){
 		self.decreasing_length = self.canvas.decreasing_length;
 		self.decreasing_length_ratio = self.canvas.decreasing_length_ratio;
 		self.base_stroke_width = self.canvas.base_stroke_width;		
-		canvas.max_children_per_branch = self.canvas.max_children_per_branch;
-		canvas.min_children_per_branch =self.canvas.min_children_per_branch;
+		self.max_children_per_branch = self.canvas.max_children_per_branch;
+		self.min_children_per_branch =self.canvas.min_children_per_branch;
 	}
 
 	refreshParams();
