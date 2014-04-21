@@ -127,18 +127,25 @@ SVGTree.Canvas = function(canvas_element, width, height){
 }
 
 SVGTree.Tree = function(width, height, level, canvas){
+
+	var self=this;
+
 	this.width = parseFloat(width)
-	//alert((level-1)/level * height);
 	this.height = (level-1)/level * parseFloat(height);
 	this.level = parseInt(level);
 
 	this.canvas = canvas;
 
-	this.symmetrical = this.canvas.symmetrical;
-	this.decreasing_width = this.canvas.decreasing_width;
-	this.decreasing_length = this.canvas.decreasing_length;
-	this.decreasing_length_ratio = this.canvas.decreasing_length_ratio;
-	this.base_stroke_width = this.canvas.base_stroke_width;
+
+	function refreshParams(){
+		self.symmetrical = self.canvas.symmetrical;
+		self.decreasing_width = self.canvas.decreasing_width;
+		self.decreasing_length = self.canvas.decreasing_length;
+		self.decreasing_length_ratio = self.canvas.decreasing_length_ratio;
+		self.base_stroke_width = self.canvas.base_stroke_width;		
+	}
+
+	refreshParams();
 
 	this.max_children_per_branch = 3;
 	this.min_children_per_branch =1;
@@ -165,6 +172,7 @@ SVGTree.Tree = function(width, height, level, canvas){
 	}
 
 	this.draw = function(node){
+		refreshParams();
 		root.draw(node);
 	}
 }
