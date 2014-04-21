@@ -26,10 +26,10 @@
 			base stroke width: <input id="thickness" class="attribute" type="number" value="2" step="0.5">
 		</div>
 		<div>
-			min branches on split: <input id="min-child" class="redraw" value="1" type="number" step="1" min="1" max="6">
+			min branches on split: <input id="min-child" class="redraw" value="1" type="number" step="1" min="1" max="4">
 		</div>
 		<div>
-			max branches on split: <input id="max-child" class="redraw" value="3" type="number" step="1" min="1" max="6">
+			max branches on split: <input id="max-child" class="redraw" value="3" type="number" step="1" min="1" max="4">
 		</div>
 		<button onclick="regenerateTree()">regenerate</button><br>
 		<button onclick="randomize()">
@@ -51,7 +51,7 @@
 		var option = document.createElement("option");
 		option.value=i;
 		option.innerHTML = i;
-		if(i=="4")
+		if(i=="5")
 			option.selected = true;
 		$("level").appendChild(option);
 	}
@@ -65,10 +65,10 @@
 
 	function randomize(){
 		$("thinner").checked = randomBool();
-		$("thickness").value = Math.floor(Math.random()*2*10)/10+1;
+		$("thickness").value = Math.floor(Math.random()*10)/10+1;
 		$("sym").checked = randomBool();
 		$("shorter").checked = randomBool();
-		$("length-ratio").value = Math.floor(Math.random()*0.8*10000)/10000+0.2;
+		$("length-ratio").value = Math.floor(Math.random()*0.9*10000)/10000+0.3;
 		$("level").value = Math.floor(9*Math.random()+2);
 		regenerateTree();
 	}
@@ -84,8 +84,10 @@
 		tree_canvas.decreasing_length= $("shorter").checked;
 		tree_canvas.decreasing_length_ratio=$("length-ratio").value;
 		tree_canvas.generateTree($("level").value);
-		tree_canvas.max_children_per_branch = 3;
-		tree_canvas.min_children_per_branch =1;
+		tree_canvas.max_children_per_branch = $("max-child").value;
+		alert($("max-child").value);
+		alert(tree_canvas.max_children_per_branch);
+		tree_canvas.min_children_per_branch =$("min-child").value;
 		attributeChange();
 	}
 
