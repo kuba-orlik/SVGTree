@@ -121,7 +121,7 @@ SVGTree.Canvas = function(canvas_element, width, height){
 	}
 
 	this.draw = function(){
-		this.svgNode.innerHTML("");
+		this.svgNode.innerHTML = "";
 		this.Tree.draw(this.svgNode);
 	}
 }
