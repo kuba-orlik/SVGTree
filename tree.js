@@ -60,6 +60,8 @@ SVGTree.Canvas = function(canvas_element, width, height){
 
 	this.symmetrical = true;
 	this.decreasing_width = true;
+	this.decreasing_length = true;
+	this.decreasing_length_ratio = 0.8;
 	this.base_stroke_width = 1;
 	
 	function init(){
@@ -125,19 +127,22 @@ SVGTree.Canvas = function(canvas_element, width, height){
 
 SVGTree.Tree = function(width, height, level, canvas){
 	this.width = parseFloat(width)
-	this.height = parseFloat(height);
+	//alert((level-1)/level * height);
+	this.height = (level-1)/level * parseFloat(height);
 	this.level = parseInt(level);
 
 	this.canvas = canvas;
 
 	this.symmetrical = this.canvas.symmetrical;
 	this.decreasing_width = this.canvas.decreasing_width;
+	this.decreasing_length = this.canvas.decreasing_length;
+	this.decreasing_length_ratio = this.canvas.decreasing_length_ratio;
 	this.base_stroke_width = this.canvas.base_stroke_width;
 
-	this.max_children_per_branch = 4;
-	this.min_children_per_branch =2;
+	this.max_children_per_branch = 3;
+	this.min_children_per_branch =1;
 
-	this.base_branch_length = height/level;
+	this.base_branch_length = this.height/level;
 
 	//this.symmetrical = symmetrical==undefined? true : symmetrical;
 
@@ -206,7 +211,13 @@ SVGTree.TreeBranch = function(){
 	}
 
 	this.newChild = function(angle){
-		var length = this.tree_origin.base_branch_length;
+		var tree = this.tree_origin;
+		var length;
+		if(tree.decreasing_length){
+			length =tree.base_branch_length * Math.pow(tree.decreasing_length_ratio, this.level);			
+		}else{
+			length = tree.base_branch_length
+		}
 		var vector = SVGTree.Math.getVectorCoordinates(length, angle);
 		var child_branch = new SVGTree.TreeBranch(this);
 		child_branch.line.pos0 = this.line.pos1;
