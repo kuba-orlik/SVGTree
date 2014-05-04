@@ -2,9 +2,7 @@ var getElem = function (selector) {
 	return document.querySelectorAll(selector);
 }
 
-var SVGTree = new function () {
-
-	};
+var SVGTree = new function () {};
 
 function ExceptionConstructor(type) {
 	return function (message) {
